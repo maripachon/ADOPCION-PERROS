@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,6 +8,17 @@ public class Main {
 
         int opcion;
         int edad;
+        int edadPerro;
+        String nombre;
+        String apellido;
+        String documento;
+        String placa;
+        String nombrePerro;
+        String raza;
+        String tamaño;
+        String placaBuscar;
+        String docConsulta;
+        String doc;
 
         do {
             System.out.println("\n--- MENÚ SISTEMA DE ADOPCIÓN ---");
@@ -18,129 +27,133 @@ public class Main {
             System.out.println("3. Ver personas registradas");
             System.out.println("4. Ver perros disponibles");
             System.out.println("5. Adoptar perro");
-            System.out.println("6. Consultar el perro más viejo adoptado");
+            System.out.println("6. Consultar el perro más viejo adoptado por una persona");
             System.out.println("7. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = sc.nextInt();
             sc.nextLine(); // limpiar buffer
 
-            if (opcion == 1) {
-                System.out.print("Nombre: ");
-                String nombre = sc.nextLine();
-                System.out.print("Apellido: ");
-                String apellido = sc.nextLine();
-                System.out.print("Edad: ");
-                edad = sc.nextInt();
-                sc.nextLine();
-                System.out.print("Documento: ");
-                String documento = sc.nextLine();
+            switch (opcion) {
+                case 1:
+                    System.out.print("Nombre: ");
+                    nombre = sc.nextLine();
+                    System.out.print("Apellido: ");
+                    apellido = sc.nextLine();
+                    System.out.print("Edad: ");
+                    edad = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Documento: ");
+                    documento = sc.nextLine();
+                    personas.add(new Persona(nombre, apellido, edad, documento));
+                    System.out.println("Persona registrada.");
+                    break;
 
-                personas.add(new Persona(nombre, apellido, edad, documento));
-                System.out.println("Persona registrada.");
+                case 2:
+                    System.out.print("Placa: ");
+                    placa = sc.nextLine();
+                    System.out.print("Nombre del perro: ");
+                    nombrePerro = sc.nextLine();
+                    System.out.print("Raza: ");
+                    raza = sc.nextLine();
+                    System.out.print("Edad: ");
+                    edadPerro = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Tamaño: ");
+                    tamaño = sc.nextLine();
+                    perrosDisponibles.add(new Perro(placa, nombrePerro, raza, edadPerro, tamaño));
+                    System.out.println("Perro registrado.");
+                    break;
 
-            } else if (opcion == 2) {
-                System.out.print("Placa: ");
-                String placa = sc.nextLine();
-                System.out.print("Nombre: ");
-                String nombre = sc.nextLine();
-                System.out.print("Raza: ");
-                String raza = sc.nextLine();
-                System.out.print("Edad: ");
-                edad = sc.nextInt();
-                sc.nextLine();
-                System.out.print("Tamaño: ");
-                String tamaño = sc.nextLine();
-
-                perrosDisponibles.add(new Perro(placa, nombre, raza, edad, tamaño));
-                System.out.println("Perro registrado.");
-
-            } else if (opcion == 3) {
-                if (personas.isEmpty()) {
-                    System.out.println("No hay personas registradas.");
-                } else {
-                    for (Persona p : personas) {
-                        System.out.println(p);
+                case 3:
+                    if (personas.isEmpty()) {
+                        System.out.println("No hay personas registradas.");
+                    } else {
+                        for (Persona p : personas) {
+                            System.out.println(p);
+                        }
                     }
-                }
+                    break;
 
-            } else if (opcion == 4) {
-                if (perrosDisponibles.isEmpty()) {
-                    System.out.println("No hay perros disponibles.");
-                } else {
-                    for (Perro p : perrosDisponibles) {
-                        System.out.println(p);
+                case 4:
+                    if (perrosDisponibles.isEmpty()) {
+                        System.out.println("No hay perros disponibles.");
+                    } else {
+                        for (Perro p : perrosDisponibles) {
+                            System.out.println(p);
+                        }
                     }
-                }
+                    break;
 
-            } else if (opcion == 5) {
-                System.out.print("Documento de la persona: ");
-                String documento = sc.nextLine();
-                Persona persona = null;
-                for (Persona p : personas) {
-                    if (p.getDocumento().equalsIgnoreCase(documento)) {
-                        persona = p;
+                case 5:
+                    System.out.print("Documento de la persona: ");
+                    doc = sc.nextLine();
+                    Persona persona = buscarPersona(personas, doc);
+                    if (persona == null) {
+                        System.out.println("Persona no encontrada.");
                         break;
                     }
-                }
 
-                if (persona == null) {
-                    System.out.println("Persona no encontrada.");
-                    continue;
-                }
-
-                System.out.print("Placa del perro a adoptar: ");
-                String placa = sc.nextLine();
-                Perro perro = null;
-                for (Perro p : perrosDisponibles) {
-                    if (p.getPlaca().equalsIgnoreCase(placa)) {
-                        perro = p;
+                    System.out.print("Placa del perro a adoptar: ");
+                    placaBuscar = sc.nextLine();
+                    Perro perro = buscarPerro(perrosDisponibles, placaBuscar);
+                    if (perro == null) {
+                        System.out.println("Perro no disponible.");
                         break;
                     }
-                }
-                if (perro == null) {
-                    System.out.println("Perro no disponible o ya adoptado.");
-                    continue;
-                }
 
-                if (persona.adoptarPerro(perro)) {
-                    perrosDisponibles.remove(perro);
-                    System.out.println("Perro adoptado exitosamente.");
-                } else {
-                    System.out.println("No puede adoptar más perros (máximo 3).");
-                }
-
-            } else if (opcion == 6) {
-                System.out.print("Documento de la persona: ");
-                String documento = sc.nextLine();
-                Persona persona = null;
-                for (Persona p : personas) {
-                    if (p.getDocumento().equalsIgnoreCase(documento)) {
-                        persona = p;
-                        break;
+                    if (persona.adoptarPerro(perro)) {
+                        perrosDisponibles.remove(perro);
+                        System.out.println("Perro adoptado con éxito.");
+                    } else {
+                        System.out.println("Esta persona ya adoptó el máximo de perros (3).");
                     }
-                }
+                    break;
 
-                if (persona == null) {
-                    System.out.println("Persona no encontrada.");
-                    continue;
-                }
+                case 6:
+                    System.out.print("Ingrese documento de la persona: ");
+                    docConsulta = sc.nextLine();
+                    Persona pConsulta = buscarPersona(personas, docConsulta);
+                    if (pConsulta == null) {
+                        System.out.println("Persona no encontrada.");
+                    } else {
+                        Perro mayor = pConsulta.perroMasGrande();
+                        if (mayor == null) {
+                            System.out.println("La persona no ha adoptado ningún perro aún.");
+                        } else {
+                            System.out.println("El perro más viejo adoptado por " + pConsulta.getNombre() + " es:");
+                            System.out.println("" + mayor);
+                        }
+                    }
+                    break;
 
-                Perro viejo = persona.perroMasGrande();
-                if (viejo == null) {
-                    System.out.println("La persona no ha adoptado ningún perro.");
-                } else {
-                    System.out.println("Perro más viejo adoptado:\n" + viejo);
-                }
+                case 7:
+                    System.out.println("👋 ¡Gracias por usar el sistema de adopción!");
+                    break;
 
-            } else if (opcion == 7) {
-                System.out.println("Saliendo...");
-
-            } else {
-                System.out.println("Opción inválida.");
+                default:
+                    System.out.println("Opción inválida.");
+                    break;
             }
 
         } while (opcion != 7);
-
         sc.close();
+    }
+
+    public static Persona buscarPersona(List<Persona> personas, String documento) {
+        for (Persona p : personas) {
+            if (p.getDocumento().equalsIgnoreCase(documento)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public static Perro buscarPerro(List<Perro> perros, String placa) {
+        for (Perro p : perros) {
+            if (p.getPlaca().equalsIgnoreCase(placa)) {
+                return p;
+            }
+        }
+        return null;
     }
 }
