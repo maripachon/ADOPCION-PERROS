@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Persona {
     private String nombre;
@@ -16,21 +15,22 @@ public class Persona {
         this.perrosAdoptados = new ArrayList<>();
     }
 
-    public String getDocumento() {
-        return documento;
-    }
+    public String getNombre() { return nombre; }
+    public String getDocumento() { return documento; }
 
     public boolean adoptarPerro(Perro perro) {
         if (perrosAdoptados.size() < 3) {
             perrosAdoptados.add(perro);
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public Perro perroMasGrande() {
-        if (perrosAdoptados.isEmpty()) return null;
-
+        if (perrosAdoptados.isEmpty()) {
+            return null;
+        }
         Perro mayor = perrosAdoptados.get(0);
         for (Perro p : perrosAdoptados) {
             if (p.getEdad() > mayor.getEdad()) {
@@ -44,10 +44,12 @@ public class Persona {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Nombre: ").append(nombre).append(" ").append(apellido)
-                .append(", Edad: ").append(edad).append(", Documento: ").append(documento)
+                .append(", Edad: ").append(edad)
+                .append(", Documento: ").append(documento)
                 .append("\nPerros adoptados:\n");
+
         if (perrosAdoptados.isEmpty()) {
-            sb.append("  Ninguno\n");
+            sb.append("  - No ha adoptado perros aún.");
         } else {
             for (Perro p : perrosAdoptados) {
                 sb.append("  - ").append(p.toString()).append("\n");
