@@ -112,15 +112,15 @@ public class Main {
                 case 6:
                     System.out.print("Ingrese documento de la persona: ");
                     docConsulta = sc.nextLine();
-                    Persona pConsulta = buscarPersona(personas, docConsulta);
-                    if (pConsulta == null) {
+                    Persona Consulta = buscarPersona(personas, docConsulta);
+                    if (Consulta == null) {
                         System.out.println("Persona no encontrada.");
                     } else {
-                        Perro mayor = pConsulta.perroMasGrande();
+                        Perro mayor = Consulta.perroMasGrande();
                         if (mayor == null) {
                             System.out.println("La persona no ha adoptado ningún perro aún.");
                         } else {
-                            System.out.println("El perro más viejo adoptado por " + pConsulta.getNombre() + " es:");
+                            System.out.println("El perro más viejo adoptado por " + Consulta.getNombre() + " es:");
                             System.out.println("" + mayor);
                         }
                     }
